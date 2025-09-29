@@ -2,12 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { getActiveModules, simulateQuizCompletion } from '@/lib/student-data';
+import { getActiveModules } from '@/lib/student-data';
 import { Zap, Ruler, Beaker } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/lib/firebase';
-import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const iconMap: { [key: string]: React.ReactNode } = {
   Zap: <Zap className="w-8 h-8 text-yellow-400" />,
@@ -16,10 +14,9 @@ const iconMap: { [key: string]: React.ReactNode } = {
 };
 
 export default function ActiveModules() {
-  const [user] = useAuthState(auth);
   const [modules, setModules] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     getActiveModules().then((data) => {
@@ -28,32 +25,13 @@ export default function ActiveModules() {
     });
   }, []);
 
-  const handleModuleClick = async (module: any) => {
-    if (!user) {
-      toast({
-        title: 'Please log in',
-        description: 'You need to be logged in to play modules.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    // Simulate completing the module and earning XP
-    try {
-      await simulateQuizCompletion(user.uid, module.title, 250);
-      toast({
-        title: 'Great job!',
-        description: `You earned 250 XP from ${module.title}! 🎉`,
-      });
-      
-      // Refresh the page to show updated stats
-      window.location.reload();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'There was a problem completing the module.',
-        variant: 'destructive',
-      });
+  const handleModuleClick = (module: any) => {
+    // For now, all modules navigate to the math-quest page.
+    // This can be updated later when other game pages are created.
+    if (module.title === 'Math Quest') {
+      router.push('/student/math-quest');
+    } else {
+      router.push('/student/math-quest');
     }
   };
 
