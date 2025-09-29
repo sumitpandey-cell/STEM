@@ -107,14 +107,7 @@ export async function getActiveModules(): Promise<ActiveModule[]> {
       description: 'Solve motion & force challenges',
       cta: 'Resume',
       iconName: 'Zap',
-      href: '/student/math-quest',
-    },
-    {
-      title: 'Math Quest',
-      description: 'Algebra & geometry adventures',
-      cta: 'Play',
-      iconName: 'Ruler',
-      href: '/student/math-quest',
+      href: '/student/balloon-pop',
     },
     {
       title: 'Balloon Pop',

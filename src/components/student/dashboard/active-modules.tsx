@@ -26,12 +26,8 @@ export default function ActiveModules() {
   }, []);
 
   const handleModuleClick = (module: any) => {
-    // For now, all modules navigate to the math-quest page.
-    // This can be updated later when other game pages are created.
-    if (module.title === 'Math Quest') {
-      router.push('/student/math-quest');
-    } else {
-      router.push('/student/math-quest');
+    if (module.href) {
+      router.push(module.href);
     }
   };
 
