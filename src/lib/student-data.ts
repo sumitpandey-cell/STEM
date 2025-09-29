@@ -21,6 +21,7 @@ export type ActiveModule = {
   description: string;
   cta: string;
   iconName: string;
+  href: string;
 };
 
 export type LeaderboardUser = {
@@ -106,18 +107,21 @@ export async function getActiveModules(): Promise<ActiveModule[]> {
       description: 'Solve motion & force challenges',
       cta: 'Resume',
       iconName: 'Zap',
+      href: '/student/math-quest',
     },
     {
       title: 'Math Quest',
       description: 'Algebra & geometry adventures',
       cta: 'Play',
       iconName: 'Ruler',
+      href: '/student/math-quest',
     },
     {
-      title: 'Chemistry Lab',
-      description: 'Elements & reactions as fun games',
+      title: 'Balloon Pop',
+      description: 'A fun way to test your math!',
       cta: 'Start',
       iconName: 'Beaker',
+      href: '/student/balloon-pop',
     },
   ];
 }
