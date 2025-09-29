@@ -17,13 +17,13 @@ export default function TeacherSignupPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-[#E0F7FA] overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-[#1a1f2e] overflow-hidden">
         <div className="absolute inset-0 -z-10">
-            <PenSquare className="absolute top-[10%] left-[20%] w-20 h-20 text-gray-300/60 animate-float-subtle-1" />
-            <BookOpen className="absolute bottom-[15%] right-[10%] w-24 h-24 text-gray-300/60 animate-float-subtle-2" />
-            <Ruler className="absolute top-[50%] right-[20%] w-20 h-20 text-gray-300/60 animate-float-subtle-3" />
+            <PenSquare className="absolute top-[10%] left-[20%] w-20 h-20 text-gray-700/60 animate-float-subtle-1" />
+            <BookOpen className="absolute bottom-[15%] right-[10%] w-24 h-24 text-gray-700/60 animate-float-subtle-2" />
+            <Ruler className="absolute top-[50%] right-[20%] w-20 h-20 text-gray-700/60 animate-float-subtle-3" />
         </div>
-      <Card className="w-full max-w-md mx-4 p-2 sm:p-4 bg-white/80 backdrop-blur-sm border-gray-200/50 shadow-2xl animate-in fade-in-0 duration-1000">
+      <Card className="w-full max-w-md mx-4 p-2 sm:p-4 bg-background/80 backdrop-blur-sm border-gray-700/50 shadow-2xl animate-in fade-in-0 duration-1000">
         <CardHeader className="text-center">
           <CardTitle className="font-headline text-3xl font-bold">Create Teacher Account</CardTitle>
           <CardDescription className="font-body text-foreground/70 pt-2">

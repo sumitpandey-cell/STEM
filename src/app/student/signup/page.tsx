@@ -9,18 +9,18 @@ import { Book, FlaskConical, Gamepad2, Medal } from 'lucide-react';
 
 const AnimatedIllustration = () => (
     <div className="absolute inset-0 -z-10 opacity-70">
-        <Book className="absolute top-[10%] left-[5%] w-16 h-16 text-gray-300/50 animate-float-1" />
-        <Gamepad2 className="absolute top-[20%] right-[10%] w-20 h-20 text-gray-300/50 animate-float-2" />
-        <FlaskConical className="absolute bottom-[15%] left-[20%] w-24 h-24 text-gray-300/50 animate-float-3" />
-        <Medal className="absolute bottom-[30%] right-[15%] w-16 h-16 text-gray-300/50 animate-float-1" />
+        <Book className="absolute top-[10%] left-[5%] w-16 h-16 text-gray-700/50 animate-float-1" />
+        <Gamepad2 className="absolute top-[20%] right-[10%] w-20 h-20 text-gray-700/50 animate-float-2" />
+        <FlaskConical className="absolute bottom-[15%] left-[20%] w-24 h-24 text-gray-700/50 animate-float-3" />
+        <Medal className="absolute bottom-[30%] right-[15%] w-16 h-16 text-gray-700/50 animate-float-1" />
     </div>
 )
 
 export default function StudentSignupPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-[#d6f4ff] overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-[#1a1f2e] overflow-hidden">
       <AnimatedIllustration />
-      <Card className="w-full max-w-md mx-4 p-2 sm:p-4 bg-white/80 backdrop-blur-sm border-gray-200/50 shadow-2xl animate-in fade-in-0 duration-1000">
+      <Card className="w-full max-w-md mx-4 p-2 sm:p-4 bg-background/80 backdrop-blur-sm border-gray-700/50 shadow-2xl animate-in fade-in-0 duration-1000">
         <CardHeader className="text-center">
           <CardTitle className="font-headline text-3xl font-bold">Start Your Learning Journey</CardTitle>
           <CardDescription className="font-body text-foreground/70 pt-2">
@@ -58,7 +58,7 @@ export default function StudentSignupPage() {
             <div className="pt-2 animate-in fade-in-0 delay-700 duration-1000 fill-mode-both">
               <Button
                 type="submit"
-                className="w-full text-white font-bold bg-gradient-to-r from-[#4ECDC4] to-[#FFD93D] transition-all duration-300 hover:shadow-lg hover:shadow-yellow-300/50 animate-pulse-slow hover:animate-none"
+                className="w-full text-white font-bold bg-gradient-to-r from-[#4ECDC4] to-[#FFD93D] transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/50 animate-pulse-slow hover:animate-none"
               >
                 Sign Up as Student
               </Button>

@@ -11,13 +11,13 @@ export default function TeacherLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#F7FFF7] to-[#E0F7FA] overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#1a1f1a] to-[#1a1f2e] overflow-hidden">
       <div className="absolute inset-0 -z-10">
-        <Pencil className="absolute top-[15%] left-[10%] w-20 h-20 text-gray-300/70 animate-float-subtle-1" />
-        <BarChart2 className="absolute bottom-[20%] right-[15%] w-24 h-24 text-gray-300/70 animate-float-subtle-2" />
-        <Pencil className="absolute bottom-[10%] left-[25%] w-16 h-16 text-gray-300/70 animate-float-subtle-3 opacity-50" />
+        <Pencil className="absolute top-[15%] left-[10%] w-20 h-20 text-gray-700/70 animate-float-subtle-1" />
+        <BarChart2 className="absolute bottom-[20%] right-[15%] w-24 h-24 text-gray-700/70 animate-float-subtle-2" />
+        <Pencil className="absolute bottom-[10%] left-[25%] w-16 h-16 text-gray-700/70 animate-float-subtle-3 opacity-50" />
       </div>
-      <Card className="w-full max-w-md mx-4 p-2 sm:p-4 bg-white/80 backdrop-blur-sm border-gray-200/50 shadow-2xl animate-in fade-in-0 slide-in-from-bottom-12 duration-1000">
+      <Card className="w-full max-w-md mx-4 p-2 sm:p-4 bg-background/80 backdrop-blur-sm border-gray-700/50 shadow-2xl animate-in fade-in-0 slide-in-from-bottom-12 duration-1000">
         <CardHeader className="text-center">
           <CardTitle className="font-headline text-3xl font-bold tracking-tight">Welcome Back, Teacher!</CardTitle>
           <CardDescription className="font-body text-foreground/70 pt-2">
@@ -39,7 +39,7 @@ export default function TeacherLoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
