@@ -1,3 +1,4 @@
+
 import { db, auth } from './firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
@@ -194,7 +195,7 @@ export async function updateStudentProfile(userId: string, updates: Partial<{
   level: number;
   xp: number;
   xpGoal: number;
-}>>): Promise<void> {
+} >): Promise<void> {
   try {
     const studentDocRef = doc(db, 'students', userId);
     await setDoc(studentDocRef, {
