@@ -16,13 +16,19 @@ export type QuickStat = {
   value: string;
 };
 
-export type ActiveModule = {
+export type Game = {
   title: string;
   description: string;
   cta: string;
-  iconName: string;
   href: string;
 };
+
+export type StemModule = {
+  title: string;
+  iconName: string;
+  games: Game[];
+};
+
 
 export type LeaderboardUser = {
   rank: number;
@@ -35,6 +41,35 @@ export type Achievement = {
   name: string;
   icon: string;
 };
+
+export async function getStemModules(): Promise<StemModule[]> {
+  return [
+    {
+      title: "Physics",
+      iconName: "Zap",
+      games: [
+        {
+          title: 'Physics Puzzle',
+          description: 'Solve motion & force challenges to test your knowledge.',
+          cta: 'Play Now',
+          href: '#', // Will point to a future physics game
+        },
+      ]
+    },
+    {
+      title: "Mathematics",
+      iconName: "Brain",
+      games: [
+         {
+          title: 'Balloon Pop',
+          description: 'A fun way to test your math calculation skills!',
+          cta: 'Start',
+          href: '/student/balloon-pop',
+        },
+      ]
+    }
+  ];
+}
 
 export async function getStudentProfile(userId: string): Promise<StudentProfile | null> {
   try {
@@ -100,25 +135,6 @@ export async function getQuickStats(): Promise<QuickStat[]> {
   ];
 }
 
-export async function getActiveModules(): Promise<ActiveModule[]> {
-  return [
-    {
-      title: 'Physics Puzzle',
-      description: 'Solve motion & force challenges',
-      cta: 'Resume',
-      iconName: 'Zap',
-      href: '/student/balloon-pop',
-    },
-    {
-      title: 'Balloon Pop',
-      description: 'A fun way to test your math!',
-      cta: 'Start',
-      iconName: 'Beaker',
-      href: '/student/balloon-pop',
-    },
-  ];
-}
-
 export async function getLeaderboardData(): Promise<LeaderboardUser[]> {
   // In a real app, you'd also fetch the current user's rank
   return [
@@ -178,7 +194,7 @@ export async function updateStudentProfile(userId: string, updates: Partial<{
   level: number;
   xp: number;
   xpGoal: number;
-}>): Promise<void> {
+}>>): Promise<void> {
   try {
     const studentDocRef = doc(db, 'students', userId);
     await setDoc(studentDocRef, {
