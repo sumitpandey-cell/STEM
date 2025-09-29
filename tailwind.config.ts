@@ -102,6 +102,11 @@ export default {
             opacity: '.85',
           },
         },
+        'shake': {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-10px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(10px)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -114,6 +119,7 @@ export default {
         'float-subtle-2': 'float-subtle 12s ease-in-out infinite',
         'float-subtle-3': 'float-subtle 15s ease-in-out infinite',
         'pulse-slow': 'pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'shake': 'shake 0.5s ease-in-out',
       },
     },
   },
