@@ -1,14 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getTeacherQuickStats } from '@/lib/teacher-data';
 import { Users, School, FileText, BookOpenCheck } from 'lucide-react';
+import React from 'react';
 
-const stats = [
-  { title: 'Total Students', icon: <Users className="text-primary" />, value: '150', delay: 150 },
-  { title: 'Active Classes', icon: <School className="text-secondary" />, value: '5', delay: 300 },
-  { title: 'Assignments Given', icon: <FileText className="text-accent" />, value: '25', delay: 450 },
-  { title: 'Modules Completed', icon: <BookOpenCheck className="text-green-500" />, value: '1,200', delay: 600 },
-];
+const iconMap: { [key: string]: React.ReactNode } = {
+  Users: <Users className="text-primary" />,
+  School: <School className="text-secondary" />,
+  FileText: <FileText className="text-accent" />,
+  BookOpenCheck: <BookOpenCheck className="text-green-500" />,
+};
 
-export default function QuickStats() {
+export default async function QuickStats() {
+  const stats = await getTeacherQuickStats();
+
   return (
     <section>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -23,7 +27,7 @@ export default function QuickStats() {
                 <CardTitle className="text-sm font-medium font-raleway text-foreground/80">
                   {stat.title}
                 </CardTitle>
-                {stat.icon}
+                {iconMap[stat.iconName]}
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>

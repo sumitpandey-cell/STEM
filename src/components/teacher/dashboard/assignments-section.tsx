@@ -1,14 +1,17 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { FilePlus, Send, BookCheck } from "lucide-react"
+import { getAssignmentActions } from "@/lib/teacher-data"
+import { BookOpenCheck, FileText, Send } from "lucide-react";
+import React from 'react';
 
-const actions = [
-    { title: "Create Assignment", icon: <FilePlus className="w-8 h-8 text-primary" />, delay: 200 },
-    { title: "Assign Quiz", icon: <Send className="w-8 h-8 text-secondary" />, delay: 400 },
-    { title: "Review Submissions", icon: <BookCheck className="w-8 h-8 text-accent" />, delay: 600 },
-]
+const iconMap: { [key: string]: React.ReactNode } = {
+    FileText: <FileText className="w-8 h-8 text-primary" />,
+    Send: <Send className="w-8 h-8 text-secondary" />,
+    BookOpenCheck: <BookOpenCheck className="w-8 h-8 text-accent" />,
+};
 
-export default function AssignmentsSection() {
+export default async function AssignmentsSection() {
+    const actions = await getAssignmentActions();
     return (
         <section className="mt-8">
             <h2 className="font-headline text-2xl font-bold mb-4">Assignments & Quizzes</h2>
@@ -23,7 +26,7 @@ export default function AssignmentsSection() {
                     <Card key={action.title} className="text-center hover:shadow-xl hover:-translate-y-2 transition-all duration-300 bg-background/50">
                         <CardHeader>
                             <div className="w-16 h-16 bg-muted rounded-full mx-auto flex items-center justify-center mb-4">
-                                {action.icon}
+                                {iconMap[action.iconName]}
                             </div>
                             <CardTitle className="font-raleway font-semibold text-lg">{action.title}</CardTitle>
                         </CardHeader>

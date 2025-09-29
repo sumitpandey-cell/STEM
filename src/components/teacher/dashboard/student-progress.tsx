@@ -1,14 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { getStudentProgress } from "@/lib/teacher-data";
 
-const students = [
-    { name: "Anita Desai", xp: 14500, progress: 85, activity: "Completed Physics Quiz 3", avatar: "https://i.pravatar.cc/150?u=student1" },
-    { name: "Vikram Seth", xp: 13200, progress: 78, activity: "Earned 'Algebra Ace' badge", avatar: "https://i.pravatar.cc/150?u=student2" },
-    { name: "Kiran Desai", xp: 15100, progress: 92, activity: "Top of the leaderboard", avatar: "https://i.pravatar.cc/150?u=student3" },
-]
 
-export default function StudentProgress() {
+export default async function StudentProgress() {
+    const students = await getStudentProgress();
+
     return (
         <section className="mt-8">
             <h2 className="font-headline text-2xl font-bold mb-4">Individual Student Progress</h2>

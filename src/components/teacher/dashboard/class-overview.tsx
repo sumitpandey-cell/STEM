@@ -1,32 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { getClassOverview } from "@/lib/teacher-data"
 
-const classes = [
-    {
-        class: "Grade 9 - Physics",
-        students: 32,
-        avgXp: 8250,
-        badges: 120,
-        topPerformer: { name: "Ravi Kumar", avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704a" }
-    },
-    {
-        class: "Grade 10 - Math",
-        students: 28,
-        avgXp: 9100,
-        badges: 150,
-        topPerformer: { name: "Priya Sharma", avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d" }
-    },
-    {
-        class: "Grade 8 - Chemistry",
-        students: 35,
-        avgXp: 7800,
-        badges: 110,
-        topPerformer: { name: "Amit Singh", avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704e" }
-    },
-]
+export default async function ClassOverview() {
+    const classes = await getClassOverview();
 
-export default function ClassOverview() {
     return (
         <section>
             <h2 className="font-headline text-2xl font-bold mb-4">Class Overview</h2>

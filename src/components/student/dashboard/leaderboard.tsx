@@ -1,15 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { getLeaderboardData } from '@/lib/student-data';
 
-const leaderboardData = [
-  { rank: 1, name: 'User One', xp: 15200 },
-  { rank: 2, name: 'User Two', xp: 14800 },
-  { rank: 3, name: 'You', xp: 12500, isCurrentUser: true },
-  { rank: 4, name: 'User Four', xp: 11900 },
-  { rank: 5, name: 'User Five', xp: 11200 },
-];
 
-export default function Leaderboard() {
+export default async function Leaderboard() {
+  const leaderboardData = await getLeaderboardData();
+
   return (
     <Card className="h-full">
       <CardHeader>
@@ -31,7 +27,7 @@ export default function Leaderboard() {
                 key={user.rank}
                 className={
                   user.isCurrentUser
-                    ? 'bg-primary/10 hover:bg-primary/20'
+                    ? 'bg-primary/20 hover:bg-primary/30'
                     : user.rank <= 3 
                     ? 'bg-muted/50' 
                     : ''

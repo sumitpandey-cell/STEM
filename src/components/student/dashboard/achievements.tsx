@@ -7,18 +7,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { getAchievements } from '@/lib/student-data';
 
-const achievements = [
-  'Fast Learner',
-  'Math Master',
-  'Science Explorer',
-  'Puzzle Pro',
-  'Quiz Whiz',
-  'Physics Phan',
-  'Chemistry King',
-];
+export default async function Achievements() {
+  const achievements = await getAchievements();
 
-export default function Achievements() {
   return (
     <section>
       <h2 className="font-headline text-2xl font-bold mb-4">Recent Achievements</h2>
@@ -36,7 +29,7 @@ export default function Achievements() {
                 <Card className="hover:bg-muted/50 hover:shadow-md transition-all duration-300">
                   <CardContent className="flex items-center justify-center p-4">
                     <Badge variant="secondary" className="text-base py-2 px-4 transition-transform hover:scale-105 hover:shadow-accent/50 shadow-sm">
-                      🏅 {achievement}
+                      {achievement.icon} {achievement.name}
                     </Badge>
                   </CardContent>
                 </Card>
