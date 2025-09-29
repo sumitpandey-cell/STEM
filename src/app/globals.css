@@ -4,53 +4,71 @@
 
 @layer base {
   :root {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 48 96.1% 53.1%;
-    --primary-foreground: 48 96.1% 13.1%;
-    --secondary: 282 82.6% 59.2%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.2 32.6% 77.5%;
-    --accent: 330 83.3% 53.5%;
-    --accent-foreground: 210 20% 98%;
+    --background: 222 84% 4.9%; /* Deep Navy */
+    --foreground: 210 40% 98%; /* Almost White */
+
+    --card: 222 84% 6.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 0 100% 71%; /* Vibrant Coral Red */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 176 98% 52%; /* Bright Teal */
+    --secondary-foreground: 222 84% 4.9%;
+    
+    --accent: 45 100% 62%; /* Sunny Yellow */
+    --accent-foreground: 222 84% 4.9%;
+
+    --muted: 217 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 48 96.1% 53.1%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 32.6% 17.5%;
+    --input: 217 32.6% 17.5%;
+    --ring: 176 98% 52%; /* Ring color to teal */
+    
     --radius: 0.8rem;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
+    
+    --chart-1: 0 100% 71%;
+    --chart-2: 176 98% 52%;
+    --chart-3: 45 100% 62%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 48 96.1% 53.1%;
-    --primary-foreground: 48 96.1% 13.1%;
-    --secondary: 282 82.6% 59.2%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.2 32.6% 77.5%;
-    --accent: 330 83.3% 53.5%;
-    --accent-foreground: 210 20% 98%;
+    --background: 222 84% 4.9%; /* Deep Navy */
+    --foreground: 210 40% 98%; /* Almost White */
+
+    --card: 222 84% 6.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 0 100% 71%; /* Vibrant Coral Red */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 176 98% 52%; /* Bright Teal */
+    --secondary-foreground: 222 84% 4.9%;
+    
+    --accent: 45 100% 62%; /* Sunny Yellow */
+    --accent-foreground: 222 84% 4.9%;
+
+    --muted: 217 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 48 96.1% 53.1%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 32.6% 17.5%;
+    --input: 217 32.6% 17.5%;
+    --ring: 176 98% 52%; /* Ring color to teal */
   }
 }
 
