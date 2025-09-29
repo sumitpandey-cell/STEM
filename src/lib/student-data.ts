@@ -50,6 +50,12 @@ export async function getStemModules(): Promise<StemModule[]> {
       iconName: "Zap",
       games: [
         {
+          title: 'Electron Adventure',
+          description: 'Navigate an electron through atoms and circuits.',
+          cta: 'Play Now',
+          href: '/student/electron-adventure',
+        },
+        {
           title: 'Physics Puzzle',
           description: 'Solve motion & force challenges to test your knowledge.',
           cta: 'Play Now',
