@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function CtaSection() {
   return (
@@ -15,11 +16,11 @@ export default function CtaSection() {
             Ready to spark a change? Get started today and bring the future of learning to your community.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-background/20 text-white hover:bg-background/30 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
-              For Students
+            <Button size="lg" variant="secondary" className="bg-background/20 text-white hover:bg-background/30 transition-all duration-300 transform hover:scale-105 hover:shadow-xl" asChild>
+              <Link href="/student/login">For Students</Link>
             </Button>
-            <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
-              For Teachers
+            <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-xl" asChild>
+              <Link href="/teacher/login">For Teachers</Link>
             </Button>
           </div>
         </div>

@@ -33,10 +33,10 @@ export default function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <Button className="hidden sm:inline-flex" variant="outline" asChild>
-            <Link href="#">For Teachers</Link>
+            <Link href="/teacher/login">For Teachers</Link>
           </Button>
           <Button className="hidden sm:inline-flex" asChild>
-            <Link href="#">For Students</Link>
+            <Link href="/student/login">For Students</Link>
           </Button>
           <Sheet>
             <SheetTrigger asChild>
@@ -61,8 +61,8 @@ export default function Header() {
                   </Link>
                 ))}
                 <hr className="my-4" />
-                 <Button variant="outline" className="w-full">For Teachers</Button>
-                 <Button className="w-full">For Students</Button>
+                 <Button variant="outline" className="w-full" asChild><Link href="/teacher/login">For Teachers</Link></Button>
+                 <Button className="w-full" asChild><Link href="/student/login">For Students</Link></Button>
               </div>
             </SheetContent>
           </Sheet>
