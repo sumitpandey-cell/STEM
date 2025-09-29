@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to read and write their own student profile
+    match /students/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow users to read and write their own teacher profile
+    match /teachers/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to read public leaderboard data
+    match /leaderboard/{document=**} {
+      allow read: if request.auth != null;
+    }
+    
+    // Allow authenticated users to read public module data
+    match /modules/{document=**} {
+      allow read: if request.auth != null;
+    }
+    
+    // Allow authenticated users to read and write their own progress
+    match /user_progress/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to read and write their own quiz results
+    match /quiz_results/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Default deny all other requests
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -11,6 +11,7 @@ import { AtomIcon } from '@/components/icons/atom-icon';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
+import { getFirebaseErrorMessage } from '@/lib/firebase-errors';
 
 
 const PlayfulLockIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -33,13 +34,30 @@ export default function StudentLoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      router.push('/student/dashboard');
-    } catch (error: any) {
+    
+    // Basic validation
+    if (!email || !password) {
       toast({
         title: 'Login Failed',
-        description: error.message,
+        description: 'Please fill in all fields',
+        variant: 'destructive',
+      });
+      setLoading(false);
+      return;
+    }
+    
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toast({
+        title: 'Success',
+        description: 'Logged in successfully!',
+      });
+      router.push('/student/dashboard');
+    } catch (error: any) {
+      console.error('Login error:', error);
+      toast({
+        title: 'Login Failed',
+        description: getFirebaseErrorMessage(error),
         variant: 'destructive',
       });
     } finally {

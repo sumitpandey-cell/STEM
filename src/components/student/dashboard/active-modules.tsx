@@ -1,8 +1,13 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { getActiveModules } from '@/lib/student-data';
+import { getActiveModules, simulateQuizCompletion } from '@/lib/student-data';
 import { Zap, Ruler, Beaker } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/lib/firebase';
+import { useToast } from '@/hooks/use-toast';
 
 const iconMap: { [key: string]: React.ReactNode } = {
   Zap: <Zap className="w-8 h-8 text-yellow-400" />,
@@ -10,9 +15,70 @@ const iconMap: { [key: string]: React.ReactNode } = {
   Beaker: <Beaker className="w-8 h-8 text-purple-400" />,
 };
 
+export default function ActiveModules() {
+  const [user] = useAuthState(auth);
+  const [modules, setModules] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-export default async function ActiveModules() {
-  const modules = await getActiveModules();
+  useEffect(() => {
+    getActiveModules().then((data) => {
+      setModules(data);
+      setLoading(false);
+    });
+  }, []);
+
+  const handleModuleClick = async (module: any) => {
+    if (!user) {
+      toast({
+        title: 'Please log in',
+        description: 'You need to be logged in to play modules.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Simulate completing the module and earning XP
+    try {
+      await simulateQuizCompletion(user.uid, module.title, 250);
+      toast({
+        title: 'Great job!',
+        description: `You earned 250 XP from ${module.title}! 🎉`,
+      });
+      
+      // Refresh the page to show updated stats
+      window.location.reload();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'There was a problem completing the module.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  if (loading) {
+    return (
+      <section>
+        <h2 className="font-headline text-2xl font-bold mb-4">Your Current Modules</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((index) => (
+            <Card key={index} className="flex flex-col justify-between">
+              <CardHeader>
+                <div className="animate-pulse">
+                  <div className="h-8 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                </div>
+              </CardHeader>
+              <CardFooter>
+                <div className="w-full h-10 bg-gray-200 rounded animate-pulse"></div>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section>
@@ -30,7 +96,12 @@ export default async function ActiveModules() {
               </div>
             </CardHeader>
             <CardFooter>
-              <Button className="w-full">{module.cta}</Button>
+              <Button 
+                className="w-full" 
+                onClick={() => handleModuleClick(module)}
+              >
+                {module.cta}
+              </Button>
             </CardFooter>
           </Card>
         ))}

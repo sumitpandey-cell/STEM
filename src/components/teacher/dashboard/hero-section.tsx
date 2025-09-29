@@ -10,16 +10,38 @@ import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function HeroSection() {
-  const [user, loading] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
   const [profile, setProfile] = useState<TeacherProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
-      getTeacherProfile(user.uid).then(setProfile);
+      setProfileLoading(true);
+      getTeacherProfile(user.uid)
+        .then((data) => {
+          setProfile(data);
+        })
+        .catch((err) => {
+          console.error('Error loading profile:', err);
+          // Set a default profile on error
+          setProfile({
+            name: 'Teacher',
+            role: 'STEM Educator',
+            school: 'Your School',
+            avatarUrl: `https://i.pravatar.cc/150?u=${user.uid}`,
+          });
+        })
+        .finally(() => {
+          setProfileLoading(false);
+        });
+    } else if (!loading) {
+      // If not loading and no user, clear profile
+      setProfile(null);
+      setProfileLoading(false);
     }
-  }, [user]);
+  }, [user, loading]);
 
-  if (loading || !profile) {
+  if (loading || profileLoading || !profile) {
     return (
        <section>
         <Card className="bg-muted/30 p-6 md:p-8">
@@ -36,6 +58,18 @@ export default function HeroSection() {
                  <Skeleton className="h-3 w-28 pt-1" />
               </div>
             </Card>
+          </div>
+        </Card>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section>
+        <Card className="bg-muted/30 p-6 md:p-8">
+          <div className="text-center">
+            <p className="text-red-500">Error loading user data. Please try refreshing the page.</p>
           </div>
         </Card>
       </section>

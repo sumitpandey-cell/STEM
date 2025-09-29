@@ -1,7 +1,5 @@
-'use server';
-
-import { db } from './firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { db, auth } from './firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export type StudentProfile = {
   username: string;
@@ -38,21 +36,59 @@ export type Achievement = {
 };
 
 export async function getStudentProfile(userId: string): Promise<StudentProfile | null> {
-  const studentDocRef = doc(db, 'students', userId);
-  const studentDoc = await getDoc(studentDocRef);
+  try {
+    const studentDocRef = doc(db, 'students', userId);
+    const studentDoc = await getDoc(studentDocRef);
 
-  if (studentDoc.exists()) {
-    const studentData = studentDoc.data();
-    return {
-      username: studentData.fullName || 'Learner',
-      level: 5, // Mock data
-      xp: 12500, // Mock data
-      xpGoal: 20000, // Mock data
+    if (studentDoc.exists()) {
+      const studentData = studentDoc.data();
+      return {
+        username: studentData.fullName || 'Learner',
+        level: studentData.level || 1,
+        xp: studentData.xp || 0,
+        xpGoal: studentData.xpGoal || 1000,
+        avatarUrl: `https://i.pravatar.cc/150?u=${userId}`,
+        grade: studentData.grade || 10,
+      };
+    }
+    
+    // If no document exists, create a default profile for the user
+    const defaultProfile = {
+      username: auth?.currentUser?.displayName || 'Learner',
+      level: 1,
+      xp: 0,
+      xpGoal: 1000,
       avatarUrl: `https://i.pravatar.cc/150?u=${userId}`,
-      grade: studentData.grade,
+      grade: 10,
+    };
+
+    // Create the document in Firestore
+    const defaultStudentData = {
+      fullName: auth?.currentUser?.displayName || 'Learner',
+      email: auth?.currentUser?.email || '',
+      grade: 10,
+      level: 1,
+      xp: 0,
+      xpGoal: 1000,
+      createdAt: new Date().toISOString(),
+      lastActive: new Date().toISOString(),
+    };
+
+    await setDoc(studentDocRef, defaultStudentData);
+    
+    return defaultProfile;
+  } catch (error) {
+    console.error('Error fetching student profile:', error);
+    // Return mock data on error
+    return {
+      username: auth?.currentUser?.displayName || 'Learner',
+      level: 1,
+      xp: 0,
+      xpGoal: 1000,
+      avatarUrl: `https://i.pravatar.cc/150?u=${userId}`,
+      grade: 10,
     };
   }
-  return null;
 }
 
 export async function getQuickStats(): Promise<QuickStat[]> {
@@ -107,4 +143,143 @@ export async function getAchievements(): Promise<Achievement[]> {
     { name: 'Physics Phan', icon: '🏅' },
     { name: 'Chemistry King', icon: '🏅' },
   ];
+}
+
+// Function to update student XP and level
+export async function updateStudentXP(userId: string, xpToAdd: number): Promise<void> {
+  try {
+    const studentDocRef = doc(db, 'students', userId);
+    const studentDoc = await getDoc(studentDocRef);
+    
+    if (studentDoc.exists()) {
+      const studentData = studentDoc.data();
+      const currentXP = studentData.xp || 0;
+      const currentLevel = studentData.level || 1;
+      const newXP = currentXP + xpToAdd;
+      
+      // Calculate new level (every 1000 XP = 1 level)
+      const newLevel = Math.floor(newXP / 1000) + 1;
+      const newXPGoal = newLevel * 1000;
+      
+      await setDoc(studentDocRef, {
+        ...studentData,
+        xp: newXP,
+        level: newLevel,
+        xpGoal: newXPGoal,
+        lastActive: new Date().toISOString(),
+      }, { merge: true });
+    }
+  } catch (error) {
+    console.error('Error updating student XP:', error);
+  }
+}
+
+// Function to update student profile information
+export async function updateStudentProfile(userId: string, updates: Partial<{
+  fullName: string;
+  grade: number;
+  level: number;
+  xp: number;
+  xpGoal: number;
+}>): Promise<void> {
+  try {
+    const studentDocRef = doc(db, 'students', userId);
+    await setDoc(studentDocRef, {
+      ...updates,
+      lastActive: new Date().toISOString(),
+    }, { merge: true });
+  } catch (error) {
+    console.error('Error updating student profile:', error);
+  }
+}
+
+// Function to get student's real-time stats based on their actual data
+export async function getStudentQuickStats(userId: string): Promise<QuickStat[]> {
+  try {
+    const studentDocRef = doc(db, 'students', userId);
+    const studentDoc = await getDoc(studentDocRef);
+    
+    if (studentDoc.exists()) {
+      const studentData = studentDoc.data();
+      const xp = studentData.xp || 0;
+      const level = studentData.level || 1;
+      
+      // Calculate badges based on level (assuming 2 badges per level)
+      const badges = level * 2;
+      
+      // Calculate quizzes completed based on XP (assuming 100 XP per quiz)
+      const quizzesCompleted = Math.floor(xp / 100);
+      
+      return [
+        { title: 'Total XP', iconName: 'Zap', value: xp.toLocaleString() },
+        { title: 'Badges Earned', iconName: 'Medal', value: badges.toString() },
+        { title: 'Quizzes Completed', iconName: 'Brain', value: quizzesCompleted.toString() },
+      ];
+    }
+  } catch (error) {
+    console.error('Error fetching student stats:', error);
+  }
+  
+  // Return default stats if error or no data
+  return getQuickStats();
+}
+
+// Function to ensure student profile exists and is complete
+export async function ensureStudentProfile(userId: string, userEmail?: string, displayName?: string): Promise<void> {
+  try {
+    const studentDocRef = doc(db, 'students', userId);
+    const studentDoc = await getDoc(studentDocRef);
+    
+    if (!studentDoc.exists()) {
+      // Create a new profile with default values
+      const defaultStudentData = {
+        fullName: displayName || 'Learner',
+        email: userEmail || '',
+        grade: 10,
+        level: 1,
+        xp: 0,
+        xpGoal: 1000,
+        createdAt: new Date().toISOString(),
+        lastActive: new Date().toISOString(),
+        badges: [],
+        completedQuizzes: [],
+        achievements: [],
+      };
+      
+      await setDoc(studentDocRef, defaultStudentData);
+    } else {
+      // Update last active time for existing users
+      await setDoc(studentDocRef, {
+        lastActive: new Date().toISOString(),
+      }, { merge: true });
+    }
+  } catch (error) {
+    console.error('Error ensuring student profile:', error);
+  }
+}
+
+// Test function to simulate earning XP (can be called from components for testing)
+export async function simulateQuizCompletion(userId: string, quizName: string, xpEarned: number = 100): Promise<void> {
+  try {
+    await updateStudentXP(userId, xpEarned);
+    
+    // Also update the quiz completion record
+    const studentDocRef = doc(db, 'students', userId);
+    const studentDoc = await getDoc(studentDocRef);
+    
+    if (studentDoc.exists()) {
+      const studentData = studentDoc.data();
+      const completedQuizzes = studentData.completedQuizzes || [];
+      
+      await setDoc(studentDocRef, {
+        completedQuizzes: [...completedQuizzes, {
+          quizName,
+          completedAt: new Date().toISOString(),
+          xpEarned,
+        }]
+      }, { merge: true });
+    }
+  } catch (error) {
+    console.error('Error simulating quiz completion:', error);
+  }
 }

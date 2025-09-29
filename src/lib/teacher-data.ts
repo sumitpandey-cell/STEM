@@ -1,5 +1,3 @@
-'use server';
-
 import { db } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { ChartConfig } from '@/components/ui/chart';
@@ -44,19 +42,37 @@ export type AssignmentAction = {
 };
 
 export async function getTeacherProfile(userId: string): Promise<TeacherProfile | null> {
-  const teacherDocRef = doc(db, 'teachers', userId);
-  const teacherDoc = await getDoc(teacherDocRef);
+  try {
+    const teacherDocRef = doc(db, 'teachers', userId);
+    const teacherDoc = await getDoc(teacherDocRef);
 
-  if (teacherDoc.exists()) {
-    const teacherData = teacherDoc.data();
+    if (teacherDoc.exists()) {
+      const teacherData = teacherDoc.data();
+      return {
+        name: teacherData.fullName || 'Teacher',
+        role: 'STEM Educator',
+        school: teacherData.schoolName || 'Your School',
+        avatarUrl: `https://i.pravatar.cc/150?u=${userId}`,
+      };
+    }
+    
+    // Return mock data if no document exists
     return {
-      name: teacherData.fullName || 'Teacher',
+      name: 'Teacher',
       role: 'STEM Educator',
-      school: teacherData.schoolName || 'Your School',
+      school: 'Your School',
+      avatarUrl: `https://i.pravatar.cc/150?u=${userId}`,
+    };
+  } catch (error) {
+    console.error('Error fetching teacher profile:', error);
+    // Return mock data on error
+    return {
+      name: 'Teacher',
+      role: 'STEM Educator',
+      school: 'Your School',
       avatarUrl: `https://i.pravatar.cc/150?u=${userId}`,
     };
   }
-  return null;
 }
 
 export async function getTeacherQuickStats(): Promise<QuickStat[]> {

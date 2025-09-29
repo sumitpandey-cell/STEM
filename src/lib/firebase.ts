@@ -1,17 +1,16 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
+import { getAuth, Auth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  "projectId": "studio-8859462964-66021",
-  "appId": "1:70674293217:web:2044ed2bb478cc5108b2a0",
-  "storageBucket": "studio-8859462964-66021.appspot.com",
-  "apiKey": "AIzaSyAN0CoXOH3nRt98dCC4Vh1vmeVwA6Ldrh8",
-  "authDomain": "studio-8859462964-66021.firebaseapp.com",
-  "messagingSenderId": "70674293217",
-  "measurementId": "G-MEASUREMENT_ID"
+  apiKey: "AIzaSyA4y-HWYCq62oQBwDinR92n5JWUMpFj6DE",
+  authDomain: "studio-7716399800-caaff.firebaseapp.com",
+  projectId: "studio-7716399800-caaff",
+  storageBucket: "studio-7716399800-caaff.firebasestorage.app",
+  messagingSenderId: "659990592520",
+  appId: "1:659990592520:web:85bdce7fe9fabcf5cde5bd"
 };
 
 // Initialize Firebase

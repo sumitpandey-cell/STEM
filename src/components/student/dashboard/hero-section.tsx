@@ -4,23 +4,50 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { getStudentProfile, StudentProfile } from '@/lib/student-data';
+import { getStudentProfile, StudentProfile, ensureStudentProfile } from '@/lib/student-data';
 import { auth } from '@/lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function HeroSection() {
-  const [user, loading] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
   const [profile, setProfile] = useState<StudentProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
-      getStudentProfile(user.uid).then(setProfile);
+      setProfileLoading(true);
+      
+      // First ensure the profile exists
+      ensureStudentProfile(user.uid, user.email || undefined, user.displayName || undefined)
+        .then(() => getStudentProfile(user.uid))
+        .then((data) => {
+          setProfile(data);
+        })
+        .catch((err) => {
+          console.error('Error loading profile:', err);
+          // Set a default profile on error
+          setProfile({
+            username: user.displayName || 'Learner',
+            level: 1,
+            xp: 0,
+            xpGoal: 1000,
+            avatarUrl: `https://i.pravatar.cc/150?u=${user.uid}`,
+            grade: 10,
+          });
+        })
+        .finally(() => {
+          setProfileLoading(false);
+        });
+    } else if (!loading) {
+      // If not loading and no user, clear profile
+      setProfile(null);
+      setProfileLoading(false);
     }
-  }, [user]);
+  }, [user, loading]);
 
-  if (loading || !profile) {
+  if (loading || profileLoading || !profile) {
     return (
       <section>
         <Card className="bg-muted/30 p-6 md:p-8">
@@ -36,6 +63,18 @@ export default function HeroSection() {
                 <Skeleton className="h-3 w-48" />
               </div>
             </Card>
+          </div>
+        </Card>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section>
+        <Card className="bg-muted/30 p-6 md:p-8">
+          <div className="text-center">
+            <p className="text-red-500">Error loading user data. Please try refreshing the page.</p>
           </div>
         </Card>
       </section>

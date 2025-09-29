@@ -12,6 +12,7 @@ import { auth, db } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
+import { getFirebaseErrorMessage } from '@/lib/firebase-errors';
 
 
 const AnimatedIllustration = () => (
@@ -58,17 +59,42 @@ export default function StudentSignupPage() {
             await updateProfile(user, { displayName: fullName });
             
             // Save student data to Firestore
-            await setDoc(doc(db, "students", user.uid), {
-                fullName: fullName,
-                grade: parseInt(grade),
-                email: email,
-            });
-
-            router.push('/student/dashboard');
+            try {
+                await setDoc(doc(db, "students", user.uid), {
+                    fullName: fullName,
+                    grade: parseInt(grade),
+                    email: email,
+                    level: 1,
+                    xp: 0,
+                    xpGoal: 1000,
+                    createdAt: new Date().toISOString(),
+                    lastActive: new Date().toISOString(),
+                    badges: [],
+                    completedQuizzes: [],
+                    achievements: [],
+                });
+                
+                toast({
+                    title: 'Success!',
+                    description: 'Account created successfully! Welcome to STEM Learning!',
+                });
+                
+                router.push('/student/dashboard');
+            } catch (firestoreError: any) {
+                console.error('Firestore error:', firestoreError);
+                toast({
+                    title: 'Profile Creation Failed',
+                    description: getFirebaseErrorMessage(firestoreError),
+                    variant: 'destructive',
+                });
+                // Still redirect to dashboard since auth worked
+                router.push('/student/dashboard');
+            }
         } catch (error: any) {
+            console.error('Signup error:', error);
             toast({
                 title: 'Signup Failed',
-                description: error.message,
+                description: getFirebaseErrorMessage(error),
                 variant: 'destructive',
             });
         } finally {
