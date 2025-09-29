@@ -7,10 +7,11 @@ import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   "projectId": "studio-8859462964-66021",
   "appId": "1:70674293217:web:2044ed2bb478cc5108b2a0",
+  "storageBucket": "studio-8859462964-66021.appspot.com",
   "apiKey": "AIzaSyAN0CoXOH3nRt98dCC4Vh1vmeVwA6Ldrh8",
   "authDomain": "studio-8859462964-66021.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "70674293217"
+  "messagingSenderId": "70674293217",
+  "measurementId": "G-MEASUREMENT_ID"
 };
 
 // Initialize Firebase
