@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, CheckCircle, PenSquare, Ruler } from 'lucide-react';
-import { auth } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 
 
@@ -35,8 +36,16 @@ export default function TeacherSignupPage() {
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName: fullName });
-      // You can save `schoolName` to your database (e.g., Firestore) associated with the user UID.
+      const user = userCredential.user;
+      await updateProfile(user, { displayName: fullName });
+      
+      // Save teacher data to Firestore
+      await setDoc(doc(db, "teachers", user.uid), {
+        fullName: fullName,
+        schoolName: schoolName,
+        email: email,
+      });
+
       router.push('/teacher/dashboard');
     } catch (error: any) {
       toast({

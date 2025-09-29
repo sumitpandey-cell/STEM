@@ -8,8 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Book, FlaskConical, Gamepad2, Medal } from 'lucide-react';
-import { auth } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 
 
@@ -42,11 +43,27 @@ export default function StudentSignupPage() {
             });
             return;
         }
+         if (!grade) {
+            toast({
+                title: 'Please select a grade',
+                description: 'You must select your grade to sign up.',
+                variant: 'destructive',
+            });
+            return;
+        }
         setLoading(true);
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(userCredential.user, { displayName: fullName });
-            // Here you could also save the grade to your database (e.g., Firestore)
+            const user = userCredential.user;
+            await updateProfile(user, { displayName: fullName });
+            
+            // Save student data to Firestore
+            await setDoc(doc(db, "students", user.uid), {
+                fullName: fullName,
+                grade: parseInt(grade),
+                email: email,
+            });
+
             router.push('/student/dashboard');
         } catch (error: any) {
             toast({
@@ -76,7 +93,7 @@ export default function StudentSignupPage() {
             </div>
             
             <div className="animate-in fade-in-0 delay-300 duration-1000 fill-mode-both">
-              <Select onValueChange={setGrade} value={grade}>
+              <Select onValueChange={setGrade} value={grade} required>
                 <SelectTrigger className="w-full font-body text-foreground/70">
                   <SelectValue placeholder="Select Grade" />
                 </SelectTrigger>
