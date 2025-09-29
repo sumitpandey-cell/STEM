@@ -1,11 +1,15 @@
 'use server';
 
+import { db } from './firebase';
+import { doc, getDoc } from 'firebase/firestore';
+
 export type StudentProfile = {
   username: string;
   level: number;
   xp: number;
   xpGoal: number;
   avatarUrl: string;
+  grade: number;
 };
 
 export type QuickStat = {
@@ -33,14 +37,22 @@ export type Achievement = {
   icon: string;
 };
 
-export async function getStudentProfile(): Promise<StudentProfile> {
-  return {
-    username: 'Learner',
-    level: 5,
-    xp: 12500,
-    xpGoal: 20000,
-    avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-  };
+export async function getStudentProfile(userId: string): Promise<StudentProfile | null> {
+  const studentDocRef = doc(db, 'students', userId);
+  const studentDoc = await getDoc(studentDocRef);
+
+  if (studentDoc.exists()) {
+    const studentData = studentDoc.data();
+    return {
+      username: studentData.fullName || 'Learner',
+      level: 5, // Mock data
+      xp: 12500, // Mock data
+      xpGoal: 20000, // Mock data
+      avatarUrl: `https://i.pravatar.cc/150?u=${userId}`,
+      grade: studentData.grade,
+    };
+  }
+  return null;
 }
 
 export async function getQuickStats(): Promise<QuickStat[]> {
@@ -75,10 +87,11 @@ export async function getActiveModules(): Promise<ActiveModule[]> {
 }
 
 export async function getLeaderboardData(): Promise<LeaderboardUser[]> {
+  // In a real app, you'd also fetch the current user's rank
   return [
     { rank: 1, name: 'User One', xp: 15200 },
     { rank: 2, name: 'User Two', xp: 14800 },
-    { rank: 3, name: 'You', xp: 12500, isCurrentUser: true },
+    { rank: 3, name: 'You', xp: 12500, isCurrentUser: true }, // This would be dynamic
     { rank: 4, name: 'User Four', xp: 11900 },
     { rank: 5, name: 'User Five', xp: 11200 },
   ];

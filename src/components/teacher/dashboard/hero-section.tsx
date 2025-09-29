@@ -1,10 +1,46 @@
+'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { getTeacherProfile } from '@/lib/teacher-data';
+import { getTeacherProfile, TeacherProfile } from '@/lib/teacher-data';
+import { auth } from '@/lib/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default async function HeroSection() {
-  const profile = await getTeacherProfile();
+export default function HeroSection() {
+  const [user, loading] = useAuthState(auth);
+  const [profile, setProfile] = useState<TeacherProfile | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      getTeacherProfile(user.uid).then(setProfile);
+    }
+  }, [user]);
+
+  if (loading || !profile) {
+    return (
+       <section>
+        <Card className="bg-muted/30 p-6 md:p-8">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div>
+              <Skeleton className="h-10 w-64 mb-2" />
+              <Skeleton className="h-6 w-96" />
+            </div>
+            <Card className="ml-auto p-4 flex items-center gap-4 bg-background/50 shadow-lg">
+              <Skeleton className="h-16 w-16 rounded-full" />
+              <div className="space-y-1">
+                <Skeleton className="h-5 w-32 mb-2" />
+                <Skeleton className="h-4 w-24" />
+                 <Skeleton className="h-3 w-28 pt-1" />
+              </div>
+            </Card>
+          </div>
+        </Card>
+      </section>
+    );
+  }
 
   return (
     <section className="animate-in fade-in slide-in-from-bottom-8 duration-1000">

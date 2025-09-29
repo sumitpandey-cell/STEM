@@ -1,5 +1,7 @@
 'use server';
 
+import { db } from './firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import { ChartConfig } from '@/components/ui/chart';
 
 export type TeacherProfile = {
@@ -41,13 +43,20 @@ export type AssignmentAction = {
   delay: number;
 };
 
-export async function getTeacherProfile(): Promise<TeacherProfile> {
-  return {
-    name: 'Teacher Name',
-    role: 'STEM Educator',
-    school: 'Dynamic School Name',
-    avatarUrl: 'https://i.pravatar.cc/150?u=teacher',
-  };
+export async function getTeacherProfile(userId: string): Promise<TeacherProfile | null> {
+  const teacherDocRef = doc(db, 'teachers', userId);
+  const teacherDoc = await getDoc(teacherDocRef);
+
+  if (teacherDoc.exists()) {
+    const teacherData = teacherDoc.data();
+    return {
+      name: teacherData.fullName || 'Teacher',
+      role: 'STEM Educator',
+      school: teacherData.schoolName || 'Your School',
+      avatarUrl: `https://i.pravatar.cc/150?u=${userId}`,
+    };
+  }
+  return null;
 }
 
 export async function getTeacherQuickStats(): Promise<QuickStat[]> {
